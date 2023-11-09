@@ -133,19 +133,65 @@
                         }
                     });
                 });
+
+                table = document.getElementsByTagName("table")[0];
+                let row, cell1, cell2;
+                for (let i = 0; i < capitals.features.length; i++) {
+                    // Create an empty <tr> element and add it to the 1st position of the table:
+                    row = table.insertRow(-1);
+                    cell1 = row.insertCell(0);
+                    cell2 = row.insertCell(1);
+                    cell1.innerHTML = capitals.features[i].properties.name;
+                    cell2.innerHTML = capitals.features[i].properties.state;
+                }
         };
 
         geojsonFetch();
 
-        table = document.getElementsByTagName("table")[0];
-        let row, cell1, cell2;
-        for (let i = 0; i < capitals.features.length; i++) {
-            // Create an empty <tr> element and add it to the 1st position of the table:
-            row = table.insertRow(-1);
-            cell1 = row.insertCell(0);
-            cell2 = row.insertCell(1);
-            cell1.innerHTML = capitals.features[i].properties.Name;
-            cell2.innerHTML = capitals.features[i].properties.state;
+        let btn = document.getElementsByTagName("button")[0];
+
+        btn.addEventListener('click', sortTable);
+        ascendingOrder = true;
+
+        function sortTable(e) {
+
+
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementsByTagName("table")[0];
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                
+
+                for (i = 1; i < rows.length - 1; i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[1]; // Change 1 to the index of your second column
+                    y = rows[i + 1].getElementsByTagName("td")[1];
+
+                    if (ascendingOrder) {// Compare the strings in reverse alphabetical order
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+
+            }
+
+            ascendingOrder = !ascendingOrder
         }
 
 
