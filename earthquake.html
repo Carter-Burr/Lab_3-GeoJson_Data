@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en-US">
  <head>
     <meta charset="utf-8">
@@ -74,6 +74,8 @@
         <div id="map"></div>
     
     </main>
+
+
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2FydGIyMCIsImEiOiJjbG9vdTlka2gwMXZlMnJwdHhkZGJ5ZHZsIn0.pe21frQ6A_Q5QZjbW9JfbA';
 
@@ -127,25 +129,24 @@
                 });
 
             });
+
+            table = document.getElementsByTagName("table")[0];
+            let row, cell1, cell2, cell3;
+            for (let i = 0; i < earthquakes.features.length; i++) {
+                // Create an empty <tr> element and add it to the 1st position of the table:
+                row = table.insertRow(-1);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell1.innerHTML = earthquakes.features[i].properties.id;
+                cell2.innerHTML = earthquakes.features[i].properties.mag;
+                cell3.innerHTML = new Date(earthquakes.features[i].properties.time).toLocaleDateString(
+                    "en-US");
+            }
+
         };
 
         geojsonFetch();
-
-
-
-        table = document.getElementsByTagName("table")[0];
-        let row, cell1, cell2, cell3;
-        for (let i = 0; i < earthquakes.features.length; i++) {
-            // Create an empty <tr> element and add it to the 1st position of the table:
-            row = table.insertRow(-1);
-            cell1 = row.insertCell(0);
-            cell2 = row.insertCell(1);
-            cell3 = row.insertCell(2);
-            cell1.innerHTML = earthquakes.features[i].properties.id;
-            cell2.innerHTML = earthquakes.features[i].properties.mag;
-            cell3.innerHTML = new Date(earthquakes.features[i].properties.time).toLocaleDateString(
-                "en-US");
-        }
 
 
         let btn = document.getElementsByTagName("button")[0];

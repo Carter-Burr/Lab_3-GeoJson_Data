@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Earthquake List</title>
+    <title>USA Capitals</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 
     <!-- Including the Mapbox GL CSS file -->
@@ -62,14 +62,14 @@
     <main id="container">
         <div id="side-panel">
 
-            <h2>Earthquake List</h2>
-            <button>Sort by Magnitude</button>
+            <h2>USA Capitals</h2>
+            <button>Alphabatize</button>
 
             <table>
                 <tr>
-                    <th>id</th>
-                    <th>magnitude</th>
-                    <th>timestamp</th>
+                    <th>Capital Name</th>
+                    <th>State</th>
+
                 </tr>
             </table>
 
@@ -80,7 +80,7 @@
 
     <script>
         mapboxgl.accessToken =
-            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+            'pk.eyJ1IjoiY2FydGIyMCIsImEiOiJjbG9vdTlka2gwMXZlMnJwdHhkZGJ5ZHZsIn0.pe21frQ6A_Q5QZjbW9JfbA';
 
         // Create the map object
         let map = new mapboxgl.Map({
@@ -91,22 +91,32 @@
         });
 
         async function geojsonFetch() {
-            let response, USA, table;
+            let response, USA, capitals, table;
             response = await fetch('assets/USA.json');
             USA = await response.json();
-            
+            response =  await fetch('assets/capitals.geojson');
+            capitals = await response.json();
 
             map.on('load', function loadingData() {
                 
                 
-                
-                
-                
-                
-                
-                
-                
-                
+                map.addSource('capitals', {
+                    type: 'geojson',
+                    data: capitals
+                });
+
+                map.addLayer({
+                    'id': 'capitals',
+                    'type': 'circle',
+                    'source': 'capitals',
+                    'paint': {
+                        'circle-radius': 8,
+                        'circle-stroke-width': 2,
+                        'circle-color': 'blue',
+                        'circle-stroke-color': 'white'
+                    }
+                });
+
                 
                 map.addSource('USA', {
                         type: 'geojson',
@@ -125,7 +135,20 @@
                 });
         };
 
-geojsonFetch();
+        geojsonFetch();
+
+        table = document.getElementsByTagName("table")[0];
+        let row, cell1, cell2;
+        for (let i = 0; i < capitals.features.length; i++) {
+            // Create an empty <tr> element and add it to the 1st position of the table:
+            row = table.insertRow(-1);
+            cell1 = row.insertCell(0);
+            cell2 = row.insertCell(1);
+            cell1.innerHTML = capitals.features[i].properties.Name;
+            cell2.innerHTML = capitals.features[i].properties.state;
+        }
+
+
 
 
 
